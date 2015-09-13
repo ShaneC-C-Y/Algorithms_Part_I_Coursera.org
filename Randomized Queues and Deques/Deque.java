@@ -1,3 +1,5 @@
+/* update on 9/13/2015 13:41   */
+/* just a version match the API*/
 import java.util.*;
 
 public class Deque<Item> implements Iterable<Item> {
