@@ -72,6 +72,7 @@ public class Deque<Item> implements Iterable<Item> {
         assert check();        
         return item;
     }               // remove and return the item from the front
+    
     public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException("no element");
         Item item = first.prev.item;
@@ -81,13 +82,31 @@ public class Deque<Item> implements Iterable<Item> {
         assert check();
         return item;
     }                // remove and return the item from the end
-    public Iterator<Item> iterator() {
-        List<Item> dequelist = new ArrayList<Item>();
-        Iterator<Item> iter = dequelist.iterator();
-        return iter;
+    
+    public Iterator<Item> iterator()  { return new DequeIterator();  }
+    
+    private class DequeIterator implements Iterator<Item> {
+        private Node current = first;
+        private int flag = 0;
+        public boolean hasNext() {
+            return current.next != first;         
+        }
+        public void remove()      { throw new UnsupportedOperationException();  }
+
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = current.item;
+            current = current.next;
+//            List<Item> dequelist = new ArrayList<Item>();
+//            Iterator<Item> iter = dequelist.iterator();
+            return item;
+        }
     }        // return an iterator over items in order from front to end
+    
     private boolean check() {
         int countN = 0;
+        if (first.prev.next != first)
+            return false;
         for (Node x = first; x != first.prev; x = x.next)
             countN++;
         return countN++ == N;
