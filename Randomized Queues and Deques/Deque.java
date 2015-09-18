@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 public class Deque<Item> implements Iterable<Item> {
     private int N;
     private Node first;
-    //private Node end;
+    private Node end;
     
     private class Node {
         private Item item;
@@ -17,7 +17,7 @@ public class Deque<Item> implements Iterable<Item> {
     public Deque() {
         N = 0;
         first = null;
-        //end = null;
+        end = null;
         assert check();
     }// construct an empty deque
     
@@ -31,43 +31,47 @@ public class Deque<Item> implements Iterable<Item> {
     
     public void addFirst(Item item) {
         Node old_first = first;
+        N++;
         first = new Node();
-        if (N == 0) {
-            first.next = first;
-            first.prev = first;
-        }
+        if (N == 1) {
+            first.next = null;
+            first.prev = null;
+            end = first;
+            end.prev = null;
+            end.next = null;
+        } 
         else {
             first.next = old_first;
-            first.prev = old_first.prev;
+            first.prev = null;
             first.next.prev = first;
-            first.prev.next = first;
         }
         first.item = item;
-        N++;
         assert check();
     }          // add the item to the front
     public void addLast(Item item) {
-        Node old_end = first.prev;
-        first.prev = new Node();
-        if (N == 0) {
-            first.next = first;
-            first.prev = first;
+        Node old_end = end;
+        end = new Node();
+        N++;
+        if (N == 1) {
+            end.prev = null;
+            end.next = null;
+            first = end;
+            first.next = null;
+            first.prev = null;
         }
         else {
-            first.prev.next = first;
-            first.prev.prev = old_end;
-            old_end.next = first.prev;
+            end.prev = old_end;
+            end.next = null;
+            end.prev.next = end;
         }
-        first.prev.item = item;
-        N++;
+        end.item = item;
         assert check();
     }          // add the item to the end
     public Item removeFirst() {
         if (isEmpty()) throw new NoSuchElementException("no element");
         Item item = first.item;
-        first.prev = first.next;
-        first.next = first.prev;
         first = first.next;
+        first.prev = null;
         N--;
         assert check();        
         return item;
@@ -75,9 +79,9 @@ public class Deque<Item> implements Iterable<Item> {
     
     public Item removeLast() {
         if (isEmpty()) throw new NoSuchElementException("no element");
-        Item item = first.prev.item;
-        first.prev.next = first;
-        first.prev = first.prev.prev;
+        Item item = end.item;
+        end.prev = end;
+        end.next = null;
         N--;
         assert check();
         return item;
@@ -88,28 +92,29 @@ public class Deque<Item> implements Iterable<Item> {
     private class DequeIterator implements Iterator<Item> {
         private Node current = first;
         private int flag = 0;
-        public boolean hasNext() {
-            return current.next != first;         
-        }
-        public void remove()      { throw new UnsupportedOperationException();  }
+        public boolean hasNext() { return current != null;                     }
+        public void remove()     { throw new UnsupportedOperationException();  }
 
         public Item next() {
             if (!hasNext()) throw new NoSuchElementException();
             Item item = current.item;
             current = current.next;
-//            List<Item> dequelist = new ArrayList<Item>();
-//            Iterator<Item> iter = dequelist.iterator();
             return item;
         }
     }        // return an iterator over items in order from front to end
     
     private boolean check() {
         int countN = 0;
-        if (first.prev.next != first)
+        int back_countN = 0;
+        if (end.next != null)
             return false;
-        for (Node x = first; x != first.prev; x = x.next)
+        if (first.prev != null)
+            return false;
+        for (Node x = first; x != null; x = x.next)
             countN++;
-        return countN++ == N;
+        for (Node y = end; y != null; y = y.prev)
+            back_countN++;
+        return (countN == N) && (back_countN == N);
     }
     
     public static void main(String[] args) {
