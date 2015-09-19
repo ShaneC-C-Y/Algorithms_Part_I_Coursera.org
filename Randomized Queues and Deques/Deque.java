@@ -1,7 +1,8 @@
 /* update on 9/13/2015 13:41   */
 /* just a version match the API*/
-import java.util.*;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Deque<Item> implements Iterable<Item> {
     private int N;
@@ -19,17 +20,18 @@ public class Deque<Item> implements Iterable<Item> {
         first = null;
         end = null;
         assert check();
-    }// construct an empty deque
+    } // construct an empty deque
     
     public boolean isEmpty() {
         return N == 0;
     }                 // is the deque empty?
     
-    public int size(){
+    public int size() {
         return N;
-    }// return the number of items on the deque
+    } // return the number of items on the deque
     
     public void addFirst(Item item) {
+        if (item == null) throw new NullPointerException("nothing");
         Node old_first = first;
         N++;
         first = new Node();
@@ -49,6 +51,7 @@ public class Deque<Item> implements Iterable<Item> {
         assert check();
     }          // add the item to the front
     public void addLast(Item item) {
+        if (item == null) throw new NullPointerException("nothing");
         Node old_end = end;
         end = new Node();
         N++;

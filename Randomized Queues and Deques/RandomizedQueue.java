@@ -1,6 +1,6 @@
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdOut;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private int N;
@@ -42,27 +42,22 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         assert check();
     }          // add the item
     
-    public Item dequeue() { 
-        int pop_num = StdRandom.uniform(N) + 1; // 1~N
-        Iterator<Item> i = this.iterator();
+    public Item dequeue() { // semms not convenient using iterator
+        int pop_num = StdRandom.uniform(N); // 0~N-1
+        Node current = first;
         Item item = null;
-        for (int n = 0; n < pop_num; n++ ){
-            item = i.next();
-            StdOut.println("n: " + n);
-        }
-        
-        
+        for (int i = 0; i < pop_num; i++)
+            current = current.next;
+        item = current.item;
         return item;
     }                    // remove and return a random item
     
     public Item sample() { 
-        int pop_num = StdRandom.uniform(N) + 1; // 1~N
+        int sample_num = StdRandom.uniform(N) + 1; // 1~N
         Iterator<Item> i = this.iterator();
         Item item = null;
-        for (int n = 0; n < pop_num; n++ ){
+        for (int n = 0; n < sample_num; n++)
             item = i.next();
-            StdOut.println("n: " + n);
-        }
         return item;
     }                     // return (but do not remove) a random item
     public Iterator<Item> iterator() { return new RadomizedQueueIterator(); }

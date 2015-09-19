@@ -8,7 +8,9 @@ public class TestRandomizedQueue {
         r.enqueue("B");
         r.enqueue("C");
         r.enqueue("D");
-        String item = r.dequeue();
-        StdOut.println(item);
+        String item = r.sample();
+        String item_pop = r.dequeue();
+        StdOut.println("sample: " + item);
+        StdOut.println("dequeue: " + item_pop);
     }
 }
