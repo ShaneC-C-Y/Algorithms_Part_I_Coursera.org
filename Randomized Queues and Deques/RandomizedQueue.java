@@ -23,6 +23,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     public boolean isEmpty() { return N == 0; }                // is the queue empty?
     public int size() { return N; }                       // return the number of items on the queue
     public void enqueue(Item item) {
+        if (item == null) throw new NullPointerException("nothing");
         N++;
         Node old_end = end;
         end = new Node();
