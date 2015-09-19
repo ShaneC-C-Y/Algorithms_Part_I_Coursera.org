@@ -12,5 +12,11 @@ public class TestRandomizedQueue {
         String item_pop = r.dequeue();
         StdOut.println("sample: " + item);
         StdOut.println("dequeue: " + item_pop);
+        for (String s : r)
+            StdOut.println(s);
+        r.dequeue();
+        r.dequeue();
+        r.dequeue();
+        StdOut.println(r.isEmpty());
     }
 }

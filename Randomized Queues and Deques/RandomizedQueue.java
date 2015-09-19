@@ -43,12 +43,34 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }          // add the item
     
     public Item dequeue() { // semms not convenient using iterator
+        
         int pop_num = StdRandom.uniform(N); // 0~N-1
         Node current = first;
         Item item = null;
         for (int i = 0; i < pop_num; i++)
             current = current.next;
         item = current.item;
+        
+        N--;
+        if (N == 0) {
+            first = null;
+            end = null;
+            return item;
+        }
+        
+        if (current == first) {
+            first = first.next;
+            first.prev = null;
+        }
+        else if (current == end) {
+            end = end.prev;
+            end.next = null;
+        }
+        else {
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
+        }
+
         return item;
     }                    // remove and return a random item
     
